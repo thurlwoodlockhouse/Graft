@@ -1,0 +1,1988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graft — Your 8 Week Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: #2a2a2a;
+    --white: #f0efeb;
+    --muted: #666;
+    --teal: #00d4aa;
+    --orange: #ff6b35;
+    --blue: #47b5ff;
+    --yellow: #ffd166;
+    --run: var(--orange);
+    --strength: var(--blue);
+    --combo: var(--teal);
+    --swim: #a78bfa;
+    --rest: #444;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ---- PROFILE SELECT ---- */
+  #profile-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+  }
+
+  .profile-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--teal);
+    margin-bottom: 48px;
+    text-transform: uppercase;
+  }
+
+  .profile-heading {
+    font-size: clamp(28px, 6vw, 48px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .profile-sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 48px;
+    text-align: center;
+  }
+
+  .profile-cards {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 500px;
+  }
+
+  .profile-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px 32px;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+    text-align: center;
+    min-width: 160px;
+    flex: 1;
+  }
+
+  .profile-card:hover {
+    border-color: var(--teal);
+    transform: translateY(-2px);
+  }
+
+  .profile-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin: 0 auto 16px;
+  }
+
+  .profile-avatar.ian { background: #001f1a; border: 2px solid var(--teal); }
+  .profile-avatar.elle { background: #1f0010; border: 2px solid #ff6eb4; }
+
+  .profile-name {
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .profile-status {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .profile-status.active { color: var(--teal); }
+  .profile-status.setup { color: var(--yellow); }
+
+  /* ---- APP SHELL ---- */
+  #app { display: none; }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--black);
+    z-index: 100;
+  }
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .app-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    color: var(--teal);
+    text-transform: uppercase;
+  }
+
+  .topbar-profile {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .topbar-profile span {
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .switch-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .switch-btn:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* ---- NAV ---- */
+  .nav {
+    display: flex;
+    gap: 2px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  .nav-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .nav-btn:hover { background: var(--surface2); color: var(--white); }
+  .nav-btn.active { background: var(--surface2); color: var(--teal); }
+
+  /* ---- VIEWS ---- */
+  .view { display: none; padding: 24px 20px; max-width: 820px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  /* ---- DASHBOARD ---- */
+  .dash-greeting {
+    margin-bottom: 28px;
+  }
+
+  .dash-greeting h2 {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+
+  .dash-greeting p {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+  }
+
+  .stat-card .val {
+    font-family: 'Space Mono', monospace;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--teal);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-card .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .section-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+
+  .next-up {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--teal);
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 28px;
+  }
+
+  .next-up-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--teal);
+    margin-bottom: 8px;
+  }
+
+  .next-up-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .next-up-detail {
+    font-size: 13px;
+    color: #aaa;
+    line-height: 1.6;
+  }
+
+  .next-up-detail li {
+    list-style: none;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .next-up-detail li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+  }
+
+  .week-progress {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 28px;
+  }
+
+  .week-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .week-progress-title {
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .week-progress-count {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--teal);
+  }
+
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 999px;
+    height: 6px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--teal);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  .session-dots {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .session-dot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .session-dot:hover { border-color: var(--teal); }
+
+  .session-dot.done {
+    border-color: var(--teal);
+    background: #001f1a;
+  }
+
+  .session-dot.done .dot-circle {
+    background: var(--teal);
+    border-color: var(--teal);
+  }
+
+  .dot-circle {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+  }
+
+  .session-dot.run-type .dot-circle { border-color: var(--orange); }
+  .session-dot.run-type.done .dot-circle { background: var(--orange); border-color: var(--orange); }
+  .session-dot.strength-type .dot-circle { border-color: var(--blue); }
+  .session-dot.strength-type.done .dot-circle { background: var(--blue); border-color: var(--blue); }
+  .session-dot.combo-type .dot-circle { border-color: var(--teal); }
+  .session-dot.combo-type.done .dot-circle { background: var(--teal); border-color: var(--teal); }
+
+  .dot-label { font-size: 12px; line-height: 1.3; }
+  .dot-day { font-size: 10px; color: var(--muted); }
+
+  /* ---- PLAN VIEW ---- */
+  .week-block {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .week-block.current-week { border-color: var(--teal); }
+
+  .week-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: var(--surface);
+    cursor: pointer;
+    gap: 12px;
+  }
+
+  .week-header:hover { background: var(--surface2); }
+
+  .week-header-left { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+
+  .week-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--teal);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .week-name { font-size: 15px; font-weight: 600; }
+  .week-focus { font-size: 12px; color: var(--muted); }
+  .week-badge {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+
+  .week-badge.current { background: #001f1a; color: var(--teal); border: 1px solid var(--teal); }
+  .week-badge.complete { background: #001f1a; color: var(--teal); }
+  .week-badge.locked { background: var(--surface2); color: var(--muted); }
+
+  .toggle-icon { color: var(--muted); font-size: 14px; transition: transform 0.2s; flex-shrink: 0; }
+  .week-block.open .toggle-icon { transform: rotate(180deg); }
+
+  .week-body { display: none; padding: 16px 20px 20px; }
+  .week-block.open .week-body { display: block; }
+
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .day-card {
+    background: var(--black);
+    border: 1px solid var(--border);
+    border-top-width: 2px;
+    border-radius: 4px;
+    padding: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .day-card.swim-day { border-top-color: var(--swim); }
+  .day-type.swim { color: var(--swim); }
+  .session-dot.swim-type .dot-circle { border-color: var(--swim); }
+  .session-dot.swim-type.done .dot-circle { background: var(--swim); border-color: var(--swim); }
+
+  .day-card.run-day { border-top-color: var(--orange); }
+  .day-card.strength-day { border-top-color: var(--blue); }
+  .day-card.combo-day { border-top-color: var(--teal); }
+  .day-card.rest-day { border-top-color: var(--rest); cursor: default; opacity: 0.5; }
+  .day-card.done-session { opacity: 0.5; }
+  .day-card.done-session::after {
+    content: '✓ Done';
+    display: block;
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--teal);
+    font-weight: 600;
+  }
+
+  .day-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .day-type { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .day-type.run { color: var(--orange); }
+  .day-type.strength { color: var(--blue); }
+  .day-type.combo { color: var(--teal); }
+  .day-type.rest { color: var(--rest); }
+
+  .day-detail { font-size: 12px; color: #999; line-height: 1.7; }
+  .day-detail li { list-style: none; padding-left: 12px; position: relative; }
+  .day-detail li::before { content: '–'; position: absolute; left: 0; color: var(--muted); }
+
+  .week-note {
+    padding: 12px 14px;
+    background: var(--surface2);
+    border-left: 2px solid var(--teal);
+    font-size: 12px;
+    color: #aaa;
+    line-height: 1.6;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .week-note strong {
+    color: var(--white);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* ---- SESSION LOG MODAL ---- */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+    max-width: 480px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .modal-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .form-group { margin-bottom: 16px; }
+
+  .form-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .form-input, .form-textarea, .form-select {
+    width: 100%;
+    background: var(--black);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--teal); }
+  .form-textarea { resize: vertical; min-height: 80px; }
+  .form-select option { background: var(--surface); }
+
+  .rating-group {
+    display: flex;
+    gap: 8px;
+  }
+
+  .rating-btn {
+    flex: 1;
+    background: var(--black);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--muted);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    padding: 8px 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+
+  .rating-btn:hover { border-color: var(--teal); color: var(--white); }
+  .rating-btn.selected { background: #001f1a; border-color: var(--teal); color: var(--teal); }
+
+  .shin-check {
+    display: flex;
+    gap: 8px;
+  }
+
+  .shin-btn {
+    flex: 1;
+    background: var(--black);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--muted);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    padding: 8px 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+
+  .shin-btn:hover { border-color: var(--teal); color: var(--white); }
+  .shin-btn.ok.selected { background: #001f1a; border-color: var(--teal); color: var(--teal); }
+  .shin-btn.warning.selected { background: #1a0800; border-color: var(--orange); color: var(--orange); }
+  .shin-btn.bad.selected { background: #1a0000; border-color: #ff4444; color: #ff4444; }
+
+  .shin-advice {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: #1a0800;
+    border-left: 2px solid var(--orange);
+    font-size: 12px;
+    color: #ffb74d;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .btn-primary {
+    flex: 1;
+    background: var(--teal);
+    color: var(--black);
+    border: none;
+    border-radius: 4px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .btn-primary:hover { opacity: 0.85; }
+
+  .btn-secondary {
+    background: none;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: var(--muted); color: var(--white); }
+
+  /* ---- LOG VIEW ---- */
+  .log-entry {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+  }
+
+  .log-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    gap: 12px;
+  }
+
+  .log-entry-title { font-weight: 600; font-size: 14px; }
+  .log-entry-date { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); }
+  .log-entry-note { font-size: 13px; color: #aaa; line-height: 1.5; }
+
+  .log-chips {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .chip.feel-great { border-color: var(--teal); color: var(--teal); }
+  .chip.feel-good { border-color: var(--blue); color: var(--blue); }
+  .chip.feel-ok { border-color: var(--yellow); color: var(--yellow); }
+  .chip.feel-rough { border-color: var(--orange); color: var(--orange); }
+  .chip.shin-warning { border-color: var(--orange); color: var(--orange); }
+  .chip.shin-bad { border-color: #ff4444; color: #ff4444; }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+
+  .empty-state p { font-size: 14px; margin-top: 8px; }
+
+  /* ---- ONBOARDING ---- */
+  #onboarding-screen {
+    display: none;
+    min-height: 100vh;
+    padding: 40px 24px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .onboarding-step { display: none; }
+  .onboarding-step.active { display: block; }
+
+  .onboarding-back {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .onboarding-back:hover { color: var(--white); }
+
+  .onboarding-progress {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 40px;
+  }
+
+  .ob-pip {
+    height: 3px;
+    flex: 1;
+    background: var(--border);
+    border-radius: 999px;
+  }
+
+  .ob-pip.done { background: var(--teal); }
+  .ob-pip.current { background: var(--teal); opacity: 0.4; }
+
+  .ob-q {
+    font-size: clamp(20px, 4vw, 28px);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .ob-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    line-height: 1.5;
+  }
+
+  .ob-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .ob-option {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    text-align: left;
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--white);
+  }
+
+  .ob-option:hover { border-color: var(--teal); }
+  .ob-option.selected { border-color: var(--teal); background: #001f1a; }
+
+  .ob-option-title { font-weight: 600; font-size: 15px; margin-bottom: 2px; }
+  .ob-option-desc { font-size: 13px; color: var(--muted); }
+  .ob-option.selected .ob-option-desc { color: #aaa; }
+
+  .ob-next {
+    width: 100%;
+    background: var(--teal);
+    color: var(--black);
+    border: none;
+    border-radius: 6px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    display: none;
+  }
+
+  .ob-next:hover { opacity: 0.85; }
+  .ob-next.visible { display: block; }
+
+  .ob-input-wrap { margin-bottom: 24px; }
+
+  /* ---- START DATE PICKER ---- */
+  #startdate-screen {
+    display: none;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .startdate-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--teal);
+    margin-bottom: 48px;
+    text-transform: uppercase;
+  }
+
+  .startdate-heading {
+    font-size: clamp(24px, 5vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+
+  .startdate-sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 36px;
+    max-width: 360px;
+    line-height: 1.5;
+  }
+
+  .date-input-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .date-input-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+
+  input[type="date"].date-picker {
+    width: 100%;
+    background: var(--black);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+    color-scheme: dark;
+  }
+
+  input[type="date"].date-picker:focus { border-color: var(--teal); }
+
+  .startdate-btn {
+    width: 100%;
+    max-width: 320px;
+    background: var(--teal);
+    color: var(--black);
+    border: none;
+    border-radius: 6px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .startdate-btn:hover { opacity: 0.85; }
+
+  .startdate-back {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 16px;
+    padding: 8px;
+  }
+
+  .startdate-back:hover { color: var(--white); }
+
+  /* suggested date badge on session tiles */
+  .suggested-date {
+    display: inline-block;
+    margin-top: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--teal);
+    opacity: 0.8;
+  }
+
+  .session-dot-date {
+    font-size: 10px;
+    color: var(--teal);
+    opacity: 0.8;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 500px) {
+    .days-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .profile-cards { flex-direction: column; }
+  }
+
+  /* ---- TOAST ---- */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--teal);
+    color: var(--black);
+    font-weight: 700;
+    font-size: 13px;
+    padding: 12px 20px;
+    border-radius: 6px;
+    transition: transform 0.3s ease;
+    z-index: 300;
+    white-space: nowrap;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ---- PHASE DIVIDER ---- */
+  .phase-div {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal);
+    padding: 20px 0 10px;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+  }
+
+  .phase-div:first-child { border-top: none; padding-top: 0; }
+</style>
+</head>
+<body>
+
+<!-- PROFILE SELECT -->
+<div id="profile-screen">
+  <div class="profile-logo">Graft</div>
+  <h1 class="profile-heading">Who's training?</h1>
+  <p class="profile-sub">Your plan, your progress.</p>
+  <div class="profile-cards">
+    <div class="profile-card" onclick="selectProfile('ian')">
+      <div class="profile-avatar ian">🏃</div>
+      <div class="profile-name">Ian</div>
+      <div class="profile-status active" id="ian-status">Week 1 active</div>
+    </div>
+    <div class="profile-card" onclick="selectProfile('elle')">
+      <div class="profile-avatar elle">✨</div>
+      <div class="profile-name">Elle</div>
+      <div class="profile-status setup" id="elle-status">Set up your plan</div>
+    </div>
+  </div>
+</div>
+
+<!-- ONBOARDING -->
+<div id="onboarding-screen">
+  <button class="onboarding-back" onclick="backToProfiles()">← Back</button>
+  <div class="onboarding-progress" id="ob-progress"></div>
+
+  <!-- Step 1: Goal -->
+  <div class="onboarding-step active" id="ob-step-1">
+    <div class="ob-q">What's the main goal, Elle?</div>
+    <div class="ob-sub">Be honest - we'll build the right plan for you.</div>
+    <div class="ob-options">
+      <button class="ob-option" onclick="obSelect(this, 'goal', 'belly')">
+        <div class="ob-option-title">Lose some belly / tone up</div>
+        <div class="ob-option-desc">A bit soft around the middle, want to feel better in clothes</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'goal', 'fitness')">
+        <div class="ob-option-title">Get fitter generally</div>
+        <div class="ob-option-desc">Feel more energetic, less out of breath, healthier overall</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'goal', 'weight')">
+        <div class="ob-option-title">Lose weight</div>
+        <div class="ob-option-desc">A more significant change, willing to put in real work</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'goal', 'strength')">
+        <div class="ob-option-title">Build strength and shape</div>
+        <div class="ob-option-desc">Less bothered about cardio, want to feel stronger</div>
+      </button>
+    </div>
+    <button class="ob-next" id="ob-next-1" onclick="obNext(2)">Next</button>
+  </div>
+
+  <!-- Step 2: Fitness level -->
+  <div class="onboarding-step" id="ob-step-2">
+    <div class="ob-q">How would you describe your fitness right now?</div>
+    <div class="ob-sub">No wrong answers - this just shapes the starting intensity.</div>
+    <div class="ob-options">
+      <button class="ob-option" onclick="obSelect(this, 'fitness', 'active')">
+        <div class="ob-option-title">Pretty active</div>
+        <div class="ob-option-desc">Exercise regularly, feel fit, looking to level up</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'fitness', 'some')">
+        <div class="ob-option-title">Somewhat active</div>
+        <div class="ob-option-desc">Do a bit here and there but no real routine</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'fitness', 'low')">
+        <div class="ob-option-title">Not very active at the moment</div>
+        <div class="ob-option-desc">Been a while since I exercised consistently</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'fitness', 'unsure')">
+        <div class="ob-option-title">I don't really know</div>
+        <div class="ob-option-desc">Let me answer a couple more questions</div>
+      </button>
+    </div>
+    <button class="ob-next" id="ob-next-2" onclick="obNextFitness()">Next</button>
+  </div>
+
+  <!-- Step 2b: Fitness probe (shown if unsure) -->
+  <div class="onboarding-step" id="ob-step-2b">
+    <div class="ob-q">A couple of quick ones to figure out your level...</div>
+    <div class="ob-sub">Answer honestly - nobody's watching.</div>
+    <div class="ob-options">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;font-size:11px;">Could you walk briskly for 30 minutes without stopping?</div>
+      <button class="ob-option" onclick="obSelect(this, 'walk30', 'yes')">
+        <div class="ob-option-title">Yes, easily</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'walk30', 'no')">
+        <div class="ob-option-title">Probably not comfortably</div>
+      </button>
+    </div>
+    <div class="ob-options" style="margin-top:16px;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em;">Could you run for 5 minutes without stopping?</div>
+      <button class="ob-option" onclick="obSelect(this, 'run5', 'yes')">
+        <div class="ob-option-title">Yes</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'run5', 'maybe')">
+        <div class="ob-option-title">Maybe, but it'd be tough</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'run5', 'no')">
+        <div class="ob-option-title">No, not really</div>
+      </button>
+    </div>
+    <button class="ob-next ob-next visible" style="display:block;margin-top:24px;" onclick="obNext(3)">Next</button>
+  </div>
+
+  <!-- Step 3: Kit -->
+  <div class="onboarding-step" id="ob-step-3">
+    <div class="ob-q">What have you got to work with?</div>
+    <div class="ob-sub">Tick everything that applies.</div>
+    <div class="ob-options" id="kit-options">
+      <button class="ob-option" onclick="obToggle(this, 'kit', 'running')">
+        <div class="ob-option-title">Running shoes</div>
+        <div class="ob-option-desc">Can run outside</div>
+      </button>
+      <button class="ob-option" onclick="obToggle(this, 'kit', 'bands')">
+        <div class="ob-option-title">Resistance bands</div>
+        <div class="ob-option-desc">Great for strength work at home</div>
+      </button>
+      <button class="ob-option" onclick="obToggle(this, 'kit', 'trx')">
+        <div class="ob-option-title">TRX / suspension trainer</div>
+        <div class="ob-option-desc">Needs a tree, door anchor or beam</div>
+      </button>
+      <button class="ob-option" onclick="obToggle(this, 'kit', 'dumbbells')">
+        <div class="ob-option-title">Dumbbells and barbell</div>
+        <div class="ob-option-desc">At home weights setup</div>
+      </button>
+      <button class="ob-option" onclick="obToggle(this, 'kit', 'gym')">
+        <div class="ob-option-title">Gym membership</div>
+        <div class="ob-option-desc">Access to pool, machines, weights</div>
+      </button>
+      <button class="ob-option" onclick="obToggle(this, 'kit', 'none')">
+        <div class="ob-option-title">Just my body</div>
+        <div class="ob-option-desc">Bodyweight only - that's fine</div>
+      </button>
+    </div>
+    <button class="ob-next ob-next visible" style="display:block;margin-top:8px;" onclick="obNext(3.5)">Next</button>
+  </div>
+
+  <!-- Step 3.5: Gym confidence (shown if gym selected) -->
+  <div class="onboarding-step" id="ob-step-3b">
+    <div class="ob-q">How comfortable are you in the gym?</div>
+    <div class="ob-sub">No wrong answer - just shapes how we structure your strength sessions.</div>
+    <div class="ob-options">
+      <button class="ob-option" onclick="obSelect(this, 'gymconfidence', 'confident')">
+        <div class="ob-option-title">Pretty comfortable</div>
+        <div class="ob-option-desc">I know my way around machines and weights</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'gymconfidence', 'machines')">
+        <div class="ob-option-title">Machines yes, free weights not really</div>
+        <div class="ob-option-desc">Happy on the kit, less sure about dumbbells and barbells</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'gymconfidence', 'beginner')">
+        <div class="ob-option-title">Complete beginner but up for it</div>
+        <div class="ob-option-desc">Don't know where to start but not scared</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'gymconfidence', 'classes')">
+        <div class="ob-option-title">I'd rather do classes or the pool</div>
+        <div class="ob-option-desc">Less keen on the gym floor</div>
+      </button>
+    </div>
+    <button class="ob-next" id="ob-next-3b" onclick="obNext(4)">Next</button>
+  </div>
+
+  <!-- Step 4: Days -->
+  <div class="onboarding-step" id="ob-step-4">
+    <div class="ob-q">How many days a week can you commit to?</div>
+    <div class="ob-sub">Be realistic - 3 consistent days beats 6 days for two weeks then nothing.</div>
+    <div class="ob-options">
+      <button class="ob-option" onclick="obSelect(this, 'days', '3')">
+        <div class="ob-option-title">3 days</div>
+        <div class="ob-option-desc">Solid foundation, manageable</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'days', '4')">
+        <div class="ob-option-title">4 days</div>
+        <div class="ob-option-desc">Good balance of effort and recovery</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'days', '5')">
+        <div class="ob-option-title">5 days</div>
+        <div class="ob-option-desc">Committed - results will come faster</div>
+      </button>
+    </div>
+    <button class="ob-next" id="ob-next-4" onclick="obNext(5)">Next</button>
+  </div>
+
+  <!-- Step 5: Injuries -->
+  <div class="onboarding-step" id="ob-step-5">
+    <div class="ob-q">Any injuries or things to be careful of?</div>
+    <div class="ob-sub">We'll work around them, not ignore them.</div>
+    <div class="ob-options">
+      <button class="ob-option" onclick="obSelect(this, 'injuries', 'none')">
+        <div class="ob-option-title">Nothing to worry about</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'injuries', 'knees')">
+        <div class="ob-option-title">Dodgy knees</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'injuries', 'back')">
+        <div class="ob-option-title">Bad back</div>
+      </button>
+      <button class="ob-option" onclick="obSelect(this, 'injuries', 'other')">
+        <div class="ob-option-title">Something else</div>
+        <div class="ob-option-desc">I'll note it when I log sessions</div>
+      </button>
+    </div>
+    <button class="ob-next" id="ob-next-5" onclick="generateEllesPlan()">Build my plan</button>
+  </div>
+
+  <!-- Step 6: Done -->
+  <div class="onboarding-step" id="ob-step-6">
+    <div class="ob-q">Your plan is ready. 💪</div>
+    <div class="ob-sub" id="ob-summary">Based on your answers, we've built you an 8 week plan.</div>
+    <button class="ob-next ob-next visible" style="display:block;margin-top:32px;" onclick="launchElleApp()">Let's go</button>
+  </div>
+</div>
+
+<!-- START DATE PICKER -->
+<div id="startdate-screen" style="display:none; min-height:100vh; align-items:center; justify-content:center; flex-direction:column; padding:40px 24px; text-align:center;">
+  <div class="startdate-logo">Graft</div>
+  <h2 class="startdate-heading">When are you starting?</h2>
+  <p class="startdate-sub" id="startdate-sub">Pick your start date and the app will suggest when to do each session across your 8 weeks.</p>
+  <div class="date-input-wrap">
+    <label class="date-input-label">Start date</label>
+    <input type="date" class="date-picker" id="start-date-input">
+  </div>
+  <button class="startdate-btn" onclick="confirmStartDate()">Set start date</button>
+  <button class="startdate-back" onclick="backToProfiles()">Back</button>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="app-logo">Graft</div>
+      <div class="topbar-profile">Training as <span id="active-profile-name">Ian</span></div>
+    </div>
+    <button class="switch-btn" onclick="backToProfiles()">Switch</button>
+  </div>
+
+  <div class="nav">
+    <button class="nav-btn active" onclick="showView('dashboard')">Dashboard</button>
+    <button class="nav-btn" onclick="showView('plan')">Full Plan</button>
+    <button class="nav-btn" onclick="showView('log')">Session Log</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="view active" id="view-dashboard">
+    <div class="dash-greeting">
+      <h2 id="dash-greeting-text">Morning, Ian.</h2>
+      <p id="dash-greeting-sub">Here's where you're at.</p>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="val" id="stat-week">1</div>
+        <div class="label">Current week</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" id="stat-done">0</div>
+        <div class="label">Sessions done</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" id="stat-streak">0</div>
+        <div class="label">Week streak</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" id="stat-total">0</div>
+        <div class="label">Total sessions</div>
+      </div>
+    </div>
+
+    <div class="next-up" id="next-up-card">
+      <div class="next-up-label">Next up</div>
+      <div class="next-up-title" id="next-up-title">Loading...</div>
+      <ul class="next-up-detail" id="next-up-detail"></ul>
+    </div>
+
+    <div class="week-progress">
+      <div class="week-progress-header">
+        <div class="week-progress-title" id="week-progress-title">Week 1 progress</div>
+        <div class="week-progress-count" id="week-progress-count">0 / 5</div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
+      </div>
+      <div class="session-dots" id="session-dots"></div>
+    </div>
+  </div>
+
+  <!-- PLAN -->
+  <div class="view" id="view-plan">
+    <div id="plan-container"></div>
+  </div>
+
+  <!-- LOG -->
+  <div class="view" id="view-log">
+    <div id="log-container">
+      <div class="empty-state">
+        <div style="font-size:32px">📋</div>
+        <p>No sessions logged yet. Tick off a session to get started.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SESSION LOG MODAL -->
+<div class="modal-overlay" id="session-modal">
+  <div class="modal">
+    <div class="modal-title" id="modal-session-title">Log session</div>
+    <div class="modal-sub" id="modal-session-sub">How did it go?</div>
+
+    <div class="form-group">
+      <label class="form-label">How did it feel?</label>
+      <div class="rating-group">
+        <button class="rating-btn" onclick="selectRating('great')">💪 Great</button>
+        <button class="rating-btn" onclick="selectRating('good')">👍 Good</button>
+        <button class="rating-btn" onclick="selectRating('ok')">😐 OK</button>
+        <button class="rating-btn" onclick="selectRating('rough')">😓 Rough</button>
+      </div>
+    </div>
+
+    <div class="form-group" id="shin-group" style="display:none;">
+      <label class="form-label">Right shin - how is it?</label>
+      <div class="shin-check">
+        <button class="shin-btn ok" onclick="selectShin('ok')">✓ Fine</button>
+        <button class="shin-btn warning" onclick="selectShin('warning')">⚠ A bit sore</button>
+        <button class="shin-btn bad" onclick="selectShin('bad')">✗ Hurting</button>
+      </div>
+      <div class="shin-advice" id="shin-advice">
+        Rest it. Swap your next run for a strength session this week. Don't push through shin pain.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Notes (optional)</label>
+      <textarea class="form-textarea" id="session-notes" placeholder="How far did you run? How did the intervals feel? Anything to remember..."></textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveSession()">Log it</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ========== DATA ==========
+
+const IAN_DEFAULT_START = '2026-07-05';
+
+const IAN_PLAN = [
+  {
+    week: 1, name: "Wake up, body", focus: "Swim to start. Easy runs. Introduce the routine. Don't hero it.",
+    note: "Starting with a swim is a great call - easy on the shin, full body, clears the head. Keep the runs genuinely easy this week, the goal is arriving at the end without dreading the next one.",
+    sessions: [
+      { id: "w1s1", day: "Tue", type: "swim", label: "Swim", detail: ["30 mins pool, any stroke", "Easy pace - this is about moving, not racing", "Focus on breathing and rhythm", "Great for the shin - zero impact"] },
+      { id: "w1s2", day: "Wed", type: "run", label: "Easy Run", detail: ["20 mins canal, conversational pace", "Warm up 5 mins walk first", "Don't look at pace"] },
+      { id: "w1s3", day: "Thu", type: "strength", label: "Dumbbells + Bodyweight", detail: ["3x12 dumbbell goblet squats", "3x10 dumbbell rows each arm", "3x10 press ups", "3x15 glute bridges", "2x30s plank"] },
+      { id: "w1s4", day: "Fri", type: "run", label: "Easy Run", detail: ["20 mins, same as Wednesday", "Still easy - end feeling like you could do more"] },
+      { id: "w1s5", day: "Sat", type: "strength", label: "Bands + Core", detail: ["3x12 banded rows", "3x12 banded chest press", "3x15 banded side steps", "3x15 sit ups", "2x30s plank"] }
+    ]
+  },
+  {
+    week: 2, name: "Push a little", focus: "Runs get longer. Strength reps increase. First intervals.",
+    note: "The Wednesday interval session is the key addition this week. Don't go full gas - you're teaching your body the pattern. The dumbbell work on Thursday starts building real strength.",
+    sessions: [
+      { id: "w2s1", day: "Mon", type: "run", label: "Easy Run", detail: ["25 mins, slightly faster than week 1", "Finish feeling warm, not wrecked"] },
+      { id: "w2s2", day: "Tue", type: "swim", label: "Swim", detail: ["35 mins pool", "Mix strokes if you can", "Try a few lengths a bit harder - just to feel the effort"] },
+      { id: "w2s3", day: "Wed", type: "run", label: "Intro Intervals", detail: ["5 min warm up jog", "6x (1 min faster, 90s easy)", "5 min cool down", "7/10 effort on the fast bits"] },
+      { id: "w2s4", day: "Thu", type: "strength", label: "Dumbbells", detail: ["3x12 dumbbell goblet squats", "3x10 dumbbell chest press (floor)", "3x12 dumbbell rows each arm", "3x12 dumbbell lunges each leg", "3x12 dumbbell shoulder press"] },
+      { id: "w2s5", day: "Fri", type: "run", label: "Longer Run", detail: ["30 mins easy pace", "This is your weekly long run from here"] }
+    ]
+  },
+  {
+    week: 3, name: "Graft starts here", focus: "Tempo run. Barbell introduced. TRX in the garden.",
+    note: "The tempo run on Monday is where real change starts. The barbell deadlift on Thursday - start light, nail the form first. Your back should stay flat throughout.",
+    sessions: [
+      { id: "w3s1", day: "Mon", type: "run", label: "Tempo Run", detail: ["5 min warm up", "15 mins uncomfortably fast - 8/10 effort", "5 min cool down", "Should only just be able to speak in single words"] },
+      { id: "w3s2", day: "Tue", type: "swim", label: "Swim", detail: ["40 mins pool", "Try to keep a steadier rhythm throughout", "Recovery swim - don't smash it after Monday's tempo"] },
+      { id: "w3s3", day: "Wed", type: "run", label: "Intervals", detail: ["5 min warm up", "8x (1 min hard, 90s easy)", "Hard means hard - 8.5/10", "5 min cool down"] },
+      { id: "w3s4", day: "Thu", type: "strength", label: "Barbell + Dumbbells", detail: ["3x8 barbell deadlift - light weight, focus on form", "3x10 dumbbell chest press", "3x12 dumbbell rows", "3x12 dumbbell shoulder press", "3x15 sit ups", "3x20 bicycle crunches"] },
+      { id: "w3s5", day: "Fri", type: "run", label: "Long Run", detail: ["35 mins easy", "Canal, keep it comfortable"] }
+    ]
+  },
+  {
+    week: 4, name: "Deload - don't skip this", focus: "Intentionally easier. Body consolidates the gains.",
+    note: "Deload weeks feel like cheating but they're not. The body repairs during rest, not during the session. You'll come back to week 5 stronger for it.",
+    sessions: [
+      { id: "w4s1", day: "Mon", type: "run", label: "Easy Run", detail: ["25 mins easy pace", "This is deliberate, not laziness"] },
+      { id: "w4s2", day: "Tue", type: "swim", label: "Recovery Swim", detail: ["30 mins easy", "This is pure recovery - slow, relaxed, enjoy it"] },
+      { id: "w4s3", day: "Wed", type: "run", label: "Short Intervals", detail: ["5 min warm up", "6x (45s hard, 90s easy)", "5 min cool down"] },
+      { id: "w4s4", day: "Thu", type: "strength", label: "Light Dumbbells", detail: ["2 sets of everything - not 3", "Focus on form, not load", "3x15 sit ups, 2x30s plank"] },
+      { id: "w4s5", day: "Fri", type: "run", label: "Easy Run", detail: ["30 mins, no pressure"] }
+    ]
+  },
+  {
+    week: 5, name: "Step it up", focus: "Harder intervals. Longer tempo. Barbell gets heavier.",
+    note: "Halfway. You should be noticeably fitter than week 1. Add a bit of weight to the barbell this week if week 3 felt comfortable. The intervals with shorter rest are significantly harder - that's intentional.",
+    sessions: [
+      { id: "w5s1", day: "Mon", type: "run", label: "Tempo Run", detail: ["5 min warm up", "20 mins tempo - proper effort", "5 min cool down"] },
+      { id: "w5s2", day: "Tue", type: "swim", label: "Swim Push", detail: ["40 mins pool", "Try 4x lengths hard, 2x easy, repeat", "First time pushing in the pool"] },
+      { id: "w5s3", day: "Wed", type: "run", label: "Hard Intervals", detail: ["5 min warm up", "10x (1 min flat out, 60s easy)", "Shorter rest makes it harder", "5 min cool down"] },
+      { id: "w5s4", day: "Thu", type: "strength", label: "Barbell + TRX", detail: ["4x8 barbell deadlift - heavier than week 3", "3x10 barbell bent-over rows", "3x10 TRX rows", "3x10 TRX push ups", "3x15 leg raises", "3x45s plank"] },
+      { id: "w5s5", day: "Fri", type: "run", label: "Long Run", detail: ["40 mins easy", "You're probably back near comfortable 5k+ now"] }
+    ]
+  },
+  {
+    week: 6, name: "Combo sessions", focus: "Run + strength same day. Metabolic. Burns more.",
+    note: "AMRAP = As Many Rounds As Possible. Set a timer, keep going for 20 mins. Count your rounds - you'll beat it in week 8. The combo sessions are hard - that's the point.",
+    sessions: [
+      { id: "w6s1", day: "Mon", type: "combo", label: "Run + Core", detail: ["25 min tempo run", "Straight into: 3x15 sit ups, 3x20 bicycle crunches, 3x45s plank", "No rest between run and core"] },
+      { id: "w6s2", day: "Tue", type: "swim", label: "Swim Intervals", detail: ["10 mins easy warm up", "8x (2 lengths hard, 1 length easy)", "5 mins cool down"] },
+      { id: "w6s3", day: "Wed", type: "run", label: "Intervals", detail: ["10x (1 min hard, 60s easy)", "Same as week 5 - try to go harder"] },
+      { id: "w6s4", day: "Thu", type: "combo", label: "AMRAP Circuit", detail: ["20 mins:", "10 press ups", "12 dumbbell squats", "10 dumbbell rows each arm", "10 burpees", "30s plank"] },
+      { id: "w6s5", day: "Fri", type: "run", label: "Long Run", detail: ["45 mins easy pace", "Earn the weekend"] }
+    ]
+  },
+  {
+    week: 7, name: "Second deload", focus: "Pull back again. Set up the final week to be your best.",
+    note: "One more week after this and you give it everything. Don't skip this - the body needs it.",
+    sessions: [
+      { id: "w7s1", day: "Mon", type: "run", label: "Easy Run", detail: ["30 mins comfortable pace"] },
+      { id: "w7s2", day: "Tue", type: "swim", label: "Easy Swim", detail: ["30 mins relaxed", "No intervals, just move"] },
+      { id: "w7s3", day: "Wed", type: "run", label: "Tempo Run", detail: ["5 min warm up", "15 mins tempo", "5 min cool down"] },
+      { id: "w7s4", day: "Thu", type: "strength", label: "Barbell + Dumbbells", detail: ["2 sets everything - lighter than week 5", "Focus on technique", "3x15 sit ups, 3x30s plank"] },
+      { id: "w7s5", day: "Fri", type: "run", label: "Easy Run", detail: ["30 mins, enjoy it"] }
+    ]
+  },
+  {
+    week: 8, name: "Leave it all out there", focus: "Best week. Beat your AMRAP. Run your fastest 5k.",
+    note: "The Friday 5k is your benchmark. Whatever you run, it'll be faster than where you started. Then decide what the next 8 weeks looks like.",
+    sessions: [
+      { id: "w8s1", day: "Mon", type: "run", label: "Tempo Run", detail: ["5 min warm up", "25 mins tempo - best effort", "5 min cool down"] },
+      { id: "w8s2", day: "Tue", type: "swim", label: "Swim Time Trial", detail: ["How far can you swim in 30 mins?", "Note it down - compare to week 1", "Proper effort"] },
+      { id: "w8s3", day: "Wed", type: "run", label: "Hard Intervals", detail: ["12x (1 min flat out, 60s easy)", "Most you've done"] },
+      { id: "w8s4", day: "Thu", type: "combo", label: "AMRAP - beat week 6", detail: ["Same circuit as week 6", "20 mins", "Beat your round count"] },
+      { id: "w8s5", day: "Fri", type: "run", label: "5k Time Trial", detail: ["Proper warm up", "Run 5k, best effort", "Started around 37-40 mins - what are you now?"] }
+    ]
+  }
+];
+
+// ========== STATE ==========
+let currentProfile = null;
+let modalSession = null;
+let modalRating = null;
+let modalShin = null;
+let obAnswers = {};
+let obKitSelections = [];
+
+function getState(profile) {
+  const key = `graft_${profile}`;
+  const raw = localStorage.getItem(key);
+  if (raw) return JSON.parse(raw);
+  return { completedSessions: {}, sessionLogs: [], plan: null, startDate: null };
+}
+
+function saveState(profile, state) {
+  localStorage.setItem(`graft_${profile}`, JSON.stringify(state));
+}
+
+function getCurrentWeek(startDateStr) {
+  const start = new Date(startDateStr || '2026-06-15');
+  const now = new Date();
+  const diffDays = Math.floor((now - start) / (1000*60*60*24));
+  return Math.min(Math.max(1, Math.floor(diffDays / 7) + 1), 8);
+}
+
+// ========== DATE HELPERS ==========
+
+// Returns suggested session dates for a given week, starting from startDate.
+// Sessions are spread Mon/Wed/Thu/Sat/Sun pattern but anchored to actual start day.
+// Pattern: run, strength, run, strength, run - with at least 1 day gap between runs.
+// We spread 5 sessions across 7 days starting from week start.
+const SESSION_DAY_OFFSETS = [0, 1, 2, 3, 4]; // Mon-Fri by default, shifted by start day
+
+function getWeekStartDate(startDateStr, weekNum) {
+  const start = new Date(startDateStr);
+  start.setHours(0, 0, 0, 0);
+  const weekStart = new Date(start);
+  weekStart.setDate(start.getDate() + (weekNum - 1) * 7);
+  return weekStart;
+}
+
+function getSuggestedDates(startDateStr, weekNum, sessions) {
+  // Spread sessions sensibly across the week.
+  // Pattern: avoid back-to-back hard sessions.
+  // With 5 sessions in 7 days: days 1, 2, 3, 5, 6 (Mon/Tue/Wed/Fri/Sat feel)
+  const offsets = [0, 1, 2, 4, 5];
+  const weekStart = getWeekStartDate(startDateStr, weekNum);
+
+  return sessions.map((session, i) => {
+    const d = new Date(weekStart);
+    d.setDate(weekStart.getDate() + (offsets[i] || i));
+    return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+  });
+}
+
+function formatDateShort(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+}
+
+// ========== PROFILE SELECT ==========
+function selectProfile(profile) {
+  currentProfile = profile;
+  const state = getState(profile);
+
+  // Ian - if no start date set, show date picker
+  if (profile === 'ian' && !state.startDate) {
+    showStartDatePicker('ian');
+    return;
+  }
+
+  // Elle - if no plan yet, go to onboarding
+  if (profile === 'elle' && !state.plan) {
+    showOnboarding();
+    return;
+  }
+
+  // Elle - if plan but no start date, show date picker
+  if (profile === 'elle' && !state.startDate) {
+    showStartDatePicker('elle');
+    return;
+  }
+
+  launchApp(profile);
+}
+
+function showStartDatePicker(profile) {
+  document.getElementById('profile-screen').style.display = 'none';
+  document.getElementById('startdate-screen').style.display = 'flex';
+
+  const name = profile === 'ian' ? 'Ian' : 'Elle';
+  document.getElementById('startdate-sub').textContent =
+    `Pick your start date, ${name}, and the app will suggest when to do each session across your 8 weeks. You can tick sessions off whenever you actually do them - the dates are just a guide.`;
+
+  // Default to today for Ian (15 June), or today for Elle
+  const defaultDate = profile === 'ian' ? IAN_DEFAULT_START : new Date().toISOString().split('T')[0];
+  document.getElementById('start-date-input').value = defaultDate;
+}
+
+function confirmStartDate() {
+  const val = document.getElementById('start-date-input').value;
+  if (!val) { showToast('Pick a start date first'); return; }
+
+  const state = getState(currentProfile);
+  state.startDate = val;
+  saveState(currentProfile, state);
+
+  document.getElementById('startdate-screen').style.display = 'none';
+  launchApp(currentProfile);
+}
+
+function backToProfiles() {
+  document.getElementById('profile-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('onboarding-screen').style.display = 'none';
+  document.getElementById('startdate-screen').style.display = 'none';
+  currentProfile = null;
+}
+
+// ========== ONBOARDING ==========
+const OB_TOTAL_STEPS = 5;
+
+function showOnboarding() {
+  document.getElementById('profile-screen').style.display = 'none';
+  document.getElementById('onboarding-screen').style.display = 'block';
+  obAnswers = {};
+  obKitSelections = [];
+  updateObProgress(1);
+  document.querySelectorAll('.onboarding-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('ob-step-1').classList.add('active');
+}
+
+function updateObProgress(currentStep) {
+  const wrap = document.getElementById('ob-progress');
+  wrap.innerHTML = '';
+  for (let i = 1; i <= OB_TOTAL_STEPS; i++) {
+    const pip = document.createElement('div');
+    pip.className = 'ob-pip' + (i < currentStep ? ' done' : i === currentStep ? ' current' : '');
+    wrap.appendChild(pip);
+  }
+}
+
+function obSelect(btn, key, val) {
+  const parent = btn.closest('.ob-options');
+  parent.querySelectorAll('.ob-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  obAnswers[key] = val;
+  const nextId = btn.closest('.onboarding-step').id.replace('ob-step-', '');
+  const nextBtn = document.getElementById(`ob-next-${nextId}`);
+  if (nextBtn) nextBtn.classList.add('visible');
+}
+
+function obToggle(btn, key, val) {
+  btn.classList.toggle('selected');
+  if (btn.classList.contains('selected')) {
+    if (!obKitSelections.includes(val)) obKitSelections.push(val);
+  } else {
+    obKitSelections = obKitSelections.filter(v => v !== val);
+  }
+  obAnswers['kit'] = obKitSelections;
+}
+
+function obNext(step) {
+  // Handle gym confidence conditional step
+  if (step === 3.5) {
+    if (obKitSelections.includes('gym')) {
+      document.querySelectorAll('.onboarding-step').forEach(s => s.classList.remove('active'));
+      document.getElementById('ob-step-3b').classList.add('active');
+      updateObProgress(4);
+    } else {
+      document.querySelectorAll('.onboarding-step').forEach(s => s.classList.remove('active'));
+      document.getElementById('ob-step-4').classList.add('active');
+      updateObProgress(4);
+    }
+    return;
+  }
+  document.querySelectorAll('.onboarding-step').forEach(s => s.classList.remove('active'));
+  document.getElementById(`ob-step-${step}`).classList.add('active');
+  updateObProgress(step);
+}
+
+function obNextFitness() {
+  if (obAnswers.fitness === 'unsure') {
+    obNext('2b');
+  } else {
+    obNext(3);
+  }
+}
+
+function generateEllesPlan() {
+  // Determine fitness level from answers
+  let level = obAnswers.fitness || 'some';
+  if (level === 'unsure') {
+    if (obAnswers.walk30 === 'yes' && obAnswers.run5 === 'yes') level = 'some';
+    else if (obAnswers.walk30 === 'yes') level = 'low';
+    else level = 'low';
+  }
+
+  const days = parseInt(obAnswers.days || '3');
+  const kit = obAnswers.kit || [];
+  const goal = obAnswers.goal || 'fitness';
+  const injuries = obAnswers.injuries || 'none';
+
+  // Build a tailored plan description
+  const summaryParts = [];
+  if (level === 'active') summaryParts.push("Starting at a solid level");
+  else if (level === 'some') summaryParts.push("Building from a moderate base");
+  else summaryParts.push("Starting steady and building up gradually");
+
+  summaryParts.push(`${days} sessions a week`);
+  if (injuries !== 'none') summaryParts.push(`${injuries} modification included`);
+
+  const summary = summaryParts.join('. ') + '. Your 8 week plan is ready - sessions are flexible, tick them off as you go.';
+
+  document.getElementById('ob-summary').textContent = summary;
+
+  // Save Elle's plan config
+  const state = getState('elle');
+  state.plan = { level, days, kit, goal, injuries };
+  state.startDate = new Date().toISOString().split('T')[0];
+  state.completedSessions = {};
+  state.sessionLogs = [];
+  saveState('elle', state);
+
+  obNext(6);
+}
+
+function launchElleApp() {
+  document.getElementById('onboarding-screen').style.display = 'none';
+  showStartDatePicker('elle');
+}
+
+// ========== APP ==========
+function launchApp(profile) {
+  document.getElementById('profile-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+
+  const name = profile === 'ian' ? 'Ian' : 'Elle';
+  document.getElementById('active-profile-name').textContent = name;
+
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Morning' : hour < 17 ? 'Afternoon' : 'Evening';
+  document.getElementById('dash-greeting-text').textContent = `${greeting}, ${name}.`;
+
+  // Update shin group visibility
+  document.getElementById('shin-group').style.display = profile === 'ian' ? 'block' : 'none';
+
+  const state = getState(profile);
+  const plan = profile === 'ian' ? IAN_PLAN : buildEllePlan(state.plan);
+  const startDate = state.startDate || IAN_DEFAULT_START;
+  const currentWeek = getCurrentWeek(startDate);
+
+  renderDashboard(profile, plan, state, currentWeek);
+  renderPlan(profile, plan, state, currentWeek);
+  renderLog(state);
+
+  showView('dashboard');
+}
+
+function buildEllePlan(config) {
+  if (!config) return IAN_PLAN;
+  const { level, days } = config;
+
+  // Simplified plan builder for Elle based on her level
+  const intensity = level === 'active' ? 1.0 : level === 'some' ? 0.75 : 0.5;
+
+  return IAN_PLAN.map(week => ({
+    ...week,
+    sessions: week.sessions.slice(0, days).map(session => {
+      if (intensity < 0.75 && session.type === 'run') {
+        const detail = session.detail.map(d => d.replace(/(\d+) mins/g, (m, n) => `${Math.max(10, Math.round(parseInt(n) * intensity))} mins`));
+        return { ...session, detail };
+      }
+      return session;
+    })
+  }));
+}
+
+// ========== DASHBOARD ==========
+function renderDashboard(profile, plan, state, currentWeek) {
+  const weekPlan = plan.find(w => w.week === currentWeek) || plan[0];
+  const weekSessions = weekPlan.sessions;
+  const startDate = state.startDate;
+  const suggestedDates = getSuggestedDates(startDate, currentWeek, weekSessions);
+
+  // Stats
+  const totalDone = Object.keys(state.completedSessions).length;
+  document.getElementById('stat-week').textContent = currentWeek;
+  document.getElementById('stat-done').textContent = weekSessions.filter(s => state.completedSessions[s.id]).length;
+  document.getElementById('stat-total').textContent = totalDone;
+
+  // Streak (count consecutive weeks with at least one session)
+  let streak = 0;
+  for (let w = currentWeek; w >= 1; w--) {
+    const wp = plan.find(x => x.week === w);
+    if (wp && wp.sessions.some(s => state.completedSessions[s.id])) streak++;
+    else break;
+  }
+  document.getElementById('stat-streak').textContent = streak;
+
+  // Next up
+  const nextIdx = weekSessions.findIndex(s => !state.completedSessions[s.id]);
+  const nextSession = nextIdx >= 0 ? weekSessions[nextIdx] : null;
+  if (nextSession) {
+    document.getElementById('next-up-title').textContent = `Week ${currentWeek}: ${nextSession.label}`;
+    const ul = document.getElementById('next-up-detail');
+    const dateStr = suggestedDates[nextIdx] ? `<li style="color:var(--teal);opacity:0.9">Suggested: ${suggestedDates[nextIdx]}</li>` : '';
+    ul.innerHTML = dateStr + nextSession.detail.map(d => `<li>${d}</li>`).join('');
+  } else {
+    document.getElementById('next-up-title').textContent = 'Week complete!';
+    document.getElementById('next-up-detail').innerHTML = '<li>All sessions done this week. Rest up.</li>';
+  }
+
+  // Week progress
+  const doneSessions = weekSessions.filter(s => state.completedSessions[s.id]).length;
+  const total = weekSessions.length;
+  document.getElementById('week-progress-title').textContent = `Week ${currentWeek} progress`;
+  document.getElementById('week-progress-count').textContent = `${doneSessions} / ${total}`;
+  document.getElementById('progress-bar').style.width = `${(doneSessions / total) * 100}%`;
+
+  // Session dots
+  const dotsWrap = document.getElementById('session-dots');
+  dotsWrap.innerHTML = '';
+  weekSessions.forEach((session, i) => {
+    const done = !!state.completedSessions[session.id];
+    const dot = document.createElement('div');
+    dot.className = `session-dot ${session.type}-type${done ? ' done' : ''}`;
+    dot.onclick = () => done ? null : openSessionModal(session, profile, plan, state, currentWeek);
+    dot.innerHTML = `
+      <div class="dot-circle">${done ? '✓' : ''}</div>
+      <div>
+        <div class="dot-label">${session.label}</div>
+        <div class="dot-day">${suggestedDates[i] || ''}</div>
+      </div>
+    `;
+    dotsWrap.appendChild(dot);
+  });
+}
+
+// ========== PLAN VIEW ==========
+function renderPlan(profile, plan, state, currentWeek) {
+  const container = document.getElementById('plan-container');
+  container.innerHTML = '';
+  const startDate = state.startDate;
+
+  const phases = [
+    { label: 'Phase 1 - Build the habit', weeks: [1, 2] },
+    { label: 'Phase 2 - Properly training', weeks: [3, 4, 5] },
+    { label: 'Phase 3 - Peak effort', weeks: [6, 7, 8] }
+  ];
+
+  phases.forEach(phase => {
+    const div = document.createElement('div');
+    div.className = 'phase-div';
+    div.textContent = phase.label;
+    container.appendChild(div);
+
+    phase.weeks.forEach(wNum => {
+      const weekData = plan.find(w => w.week === wNum);
+      if (!weekData) return;
+
+      const isCurrent = wNum === currentWeek;
+      const isComplete = weekData.sessions.every(s => state.completedSessions[s.id]);
+      const suggestedDates = getSuggestedDates(startDate, wNum, weekData.sessions);
+
+      const block = document.createElement('div');
+      block.className = `week-block${isCurrent ? ' current-week' : ''}${isCurrent ? ' open' : ''}`;
+      block.id = `plan-week-${wNum}`;
+
+      // Week date range
+      const weekStart = getWeekStartDate(startDate, wNum);
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6);
+      const weekRange = `${weekStart.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} - ${weekEnd.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`;
+
+      let badge = '';
+      if (isCurrent) badge = '<span class="week-badge current">This week</span>';
+      else if (isComplete) badge = '<span class="week-badge complete">Complete</span>';
+      else if (wNum > currentWeek + 1) badge = '<span class="week-badge locked">Coming up</span>';
+
+      block.innerHTML = `
+        <div class="week-header" onclick="togglePlanWeek(${wNum})">
+          <div>
+            <div class="week-header-left">
+              <span class="week-num">Week ${String(wNum).padStart(2,'0')}</span>
+              <span class="week-name">${weekData.name}</span>
+              ${badge}
+            </div>
+            <div class="week-focus">${weekData.focus} <span style="color:var(--teal);opacity:0.7;font-family:'Space Mono',monospace;font-size:10px;margin-left:8px;">${weekRange}</span></div>
+          </div>
+          <div class="toggle-icon">▾</div>
+        </div>
+        <div class="week-body">
+          <div class="days-grid" id="days-grid-${wNum}"></div>
+          <div class="week-note"><strong>Coach note</strong>${weekData.note}</div>
+        </div>
+      `;
+
+      container.appendChild(block);
+
+      const grid = block.querySelector(`#days-grid-${wNum}`);
+      weekData.sessions.forEach((session, i) => {
+        const done = !!state.completedSessions[session.id];
+        const card = document.createElement('div');
+        card.className = `day-card ${session.type}-day${done ? ' done-session' : ''}`;
+        card.onclick = () => !done && openSessionModal(session, profile, plan, state, currentWeek);
+        card.innerHTML = `
+          <div class="day-label">${suggestedDates[i] || session.day}</div>
+          <div class="day-type ${session.type}">${session.label}</div>
+          <ul class="day-detail">${session.detail.map(d => `<li>${d}</li>`).join('')}</ul>
+        `;
+        grid.appendChild(card);
+      });
+    });
+  });
+}
+
+function togglePlanWeek(wNum) {
+  const block = document.getElementById(`plan-week-${wNum}`);
+  block.classList.toggle('open');
+}
+
+// ========== SESSION MODAL ==========
+function openSessionModal(session, profile, plan, state, currentWeek) {
+  modalSession = { session, profile, plan, state, currentWeek };
+  modalRating = null;
+  modalShin = null;
+
+  document.getElementById('modal-session-title').textContent = session.label;
+  document.getElementById('modal-session-sub').textContent = `Week ${currentWeek} - ${session.day}`;
+  document.getElementById('session-notes').value = '';
+
+  document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.shin-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('shin-advice').style.display = 'none';
+
+  document.getElementById('session-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('session-modal').classList.remove('open');
+  modalSession = null;
+}
+
+function selectRating(val) {
+  modalRating = val;
+  document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+  event.target.classList.add('selected');
+}
+
+function selectShin(val) {
+  modalShin = val;
+  document.querySelectorAll('.shin-btn').forEach(b => b.classList.remove('selected'));
+  event.target.classList.add('selected');
+  document.getElementById('shin-advice').style.display = val === 'bad' || val === 'warning' ? 'block' : 'none';
+}
+
+function saveSession() {
+  if (!modalSession) return;
+  const { session, profile, plan, state, currentWeek } = modalSession;
+
+  state.completedSessions[session.id] = {
+    date: new Date().toISOString(),
+    rating: modalRating,
+    shin: modalShin,
+    notes: document.getElementById('session-notes').value.trim()
+  };
+
+  state.sessionLogs.unshift({
+    id: session.id,
+    label: session.label,
+    week: currentWeek,
+    day: session.day,
+    type: session.type,
+    date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+    rating: modalRating,
+    shin: modalShin,
+    notes: document.getElementById('session-notes').value.trim()
+  });
+
+  saveState(profile, state);
+  closeModal();
+  showToast('Session logged. Nice work.');
+
+  renderDashboard(profile, plan, state, currentWeek);
+  renderPlan(profile, plan, state, currentWeek);
+  renderLog(state);
+}
+
+// ========== LOG VIEW ==========
+function renderLog(state) {
+  const container = document.getElementById('log-container');
+  if (!state.sessionLogs || state.sessionLogs.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div style="font-size:32px">📋</div><p>No sessions logged yet. Tick off a session to get started.</p></div>`;
+    return;
+  }
+
+  container.innerHTML = state.sessionLogs.map(log => {
+    const feelClass = log.rating ? `feel-${log.rating}` : '';
+    const feelLabel = { great: '💪 Great', good: '👍 Good', ok: '😐 OK', rough: '😓 Rough' }[log.rating] || '';
+    const shinLabel = log.shin === 'warning' ? '⚠ Shin sore' : log.shin === 'bad' ? '✗ Shin bad' : '';
+    const shinClass = log.shin === 'warning' ? 'shin-warning' : log.shin === 'bad' ? 'shin-bad' : '';
+
+    return `
+      <div class="log-entry">
+        <div class="log-entry-header">
+          <div>
+            <div class="log-entry-title">Week ${log.week}: ${log.label}</div>
+          </div>
+          <div class="log-entry-date">${log.date}</div>
+        </div>
+        ${log.notes ? `<div class="log-entry-note">${log.notes}</div>` : ''}
+        <div class="log-chips">
+          ${feelLabel ? `<span class="chip ${feelClass}">${feelLabel}</span>` : ''}
+          ${shinLabel ? `<span class="chip ${shinClass}">${shinLabel}</span>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ========== NAV ==========
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`view-${name}`).classList.add('active');
+  document.querySelector(`.nav-btn[onclick="showView('${name}')"]`).classList.add('active');
+}
+
+// ========== TOAST ==========
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ========== ELLE STATUS ==========
+function updateElleStatus() {
+  const state = getState('elle');
+  const el = document.getElementById('elle-status');
+  if (state.plan) {
+    el.textContent = 'Plan active';
+    el.className = 'profile-status active';
+  }
+}
+
+updateElleStatus();
+</script>
+</body>
+</html>
