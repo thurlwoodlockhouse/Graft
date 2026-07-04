@@ -1234,6 +1234,7 @@
     <button class="nav-btn" onclick="showView('plan')">Full Plan</button>
     <button class="nav-btn" onclick="showView('log')">Session Log</button>
     <button class="nav-btn" onclick="showView('measurements')">Measurements</button>
+    <button class="nav-btn" id="photos-nav-btn" onclick="showView('photos')">Photos</button>
   </div>
 
   <!-- DASHBOARD -->
@@ -1332,8 +1333,43 @@
       <canvas id="measurements-chart" style="width:100%;max-height:220px;"></canvas>
     </div>
 
-    <!-- History -->
-    <div id="measurements-history"></div>
+  <!-- PHOTOS -->
+  <div class="view" id="view-photos">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <h2 style="font-size:22px;font-weight:700;letter-spacing:-0.01em;">Progress Photos</h2>
+      <button onclick="togglePhotoPrivacy()" id="privacy-btn" style="background:var(--surface);border:1px solid var(--border);border-radius:4px;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:12px;padding:6px 12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
+        <span id="privacy-icon">🔓</span> <span id="privacy-label">Unlocked</span>
+      </button>
+    </div>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:8px;">Front and side, weekly. Keep it honest.</p>
+    <div style="background:#1a0800;border-left:2px solid var(--orange);border-radius:0 4px 4px 0;padding:10px 14px;font-size:12px;color:#ffb74d;margin-bottom:24px;">
+      Photos are stored locally in this browser only. Also save them to your phone as a backup.
+    </div>
+
+    <!-- Upload this week -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:20px;margin-bottom:24px;">
+      <div class="section-title" style="margin-bottom:16px;">Add this week's photos</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div>
+          <label class="form-label">Front</label>
+          <label style="display:flex;align-items:center;justify-content:center;height:120px;background:var(--black);border:1px dashed var(--border);border-radius:4px;cursor:pointer;color:var(--muted);font-size:13px;gap:8px;transition:border-color 0.2s;" id="front-label">
+            <span id="front-preview-wrap">📷 Choose photo</span>
+            <input type="file" accept="image/*" id="photo-front" style="display:none;" onchange="previewPhoto('front')">
+          </label>
+        </div>
+        <div>
+          <label class="form-label">Side</label>
+          <label style="display:flex;align-items:center;justify-content:center;height:120px;background:var(--black);border:1px dashed var(--border);border-radius:4px;cursor:pointer;color:var(--muted);font-size:13px;gap:8px;transition:border-color 0.2s;" id="side-label">
+            <span id="side-preview-wrap">📷 Choose photo</span>
+            <input type="file" accept="image/*" id="photo-side" style="display:none;" onchange="previewPhoto('side')">
+          </label>
+        </div>
+      </div>
+      <button class="btn-primary" style="max-width:200px;" onclick="savePhotos()">Save photos</button>
+    </div>
+
+    <!-- Photo history -->
+    <div id="photos-history"></div>
   </div>
 
 </div>
@@ -1722,6 +1758,10 @@ function launchApp(profile) {
   const greeting = hour < 12 ? 'Morning' : hour < 17 ? 'Afternoon' : 'Evening';
   document.getElementById('dash-greeting-text').textContent = `${greeting}, ${name}.`;
 
+  // Hide photos tab for Elle
+  const photosNav = document.getElementById('photos-nav-btn');
+  if (photosNav) photosNav.style.display = 'block';
+
   // Update shin group visibility
   document.getElementById('shin-group').style.display = profile === 'ian' ? 'block' : 'none';
 
@@ -2006,6 +2046,7 @@ function showView(name) {
   document.getElementById(`view-${name}`).classList.add('active');
   document.querySelector(`.nav-btn[onclick="showView('${name}')"]`).classList.add('active');
   if (name === 'measurements') renderMeasurements();
+  if (name === 'photos') renderPhotos();
 }
 
 // ========== WEIGHT CONVERSION ==========
@@ -2210,6 +2251,104 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ========== PHOTOS ==========
+let photosPrivate = false;
+let pendingPhotos = { front: null, side: null };
+
+function togglePhotoPrivacy() {
+  photosPrivate = !photosPrivate;
+  document.getElementById('privacy-icon').textContent = photosPrivate ? '🔒' : '🔓';
+  document.getElementById('privacy-label').textContent = photosPrivate ? 'Locked' : 'Unlocked';
+  document.getElementById('privacy-btn').style.borderColor = photosPrivate ? 'var(--orange)' : 'var(--border)';
+  document.getElementById('privacy-btn').style.color = photosPrivate ? 'var(--orange)' : 'var(--muted)';
+  renderPhotos();
+}
+
+function previewPhoto(side) {
+  const input = document.getElementById(`photo-${side}`);
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    pendingPhotos[side] = e.target.result;
+    const wrap = document.getElementById(`${side}-preview-wrap`);
+    wrap.innerHTML = `<img src="${e.target.result}" style="height:110px;width:100%;object-fit:cover;border-radius:4px;">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+function savePhotos() {
+  if (!pendingPhotos.front && !pendingPhotos.side) {
+    showToast('Choose at least one photo first');
+    return;
+  }
+
+  const state = getState(currentProfile);
+  if (!state.photos) state.photos = [];
+
+  const startDate = state.startDate || IAN_DEFAULT_START;
+  const currentWeek = getCurrentWeek(startDate);
+
+  // Remove existing entry for this week if exists
+  state.photos = state.photos.filter(p => p.week !== currentWeek);
+
+  state.photos.unshift({
+    week: currentWeek,
+    date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+    front: pendingPhotos.front || null,
+    side: pendingPhotos.side || null
+  });
+
+  saveState(currentProfile, state);
+  pendingPhotos = { front: null, side: null };
+
+  document.getElementById('front-preview-wrap').innerHTML = '📷 Choose photo';
+  document.getElementById('side-preview-wrap').innerHTML = '📷 Choose photo';
+  document.getElementById('photo-front').value = '';
+  document.getElementById('photo-side').value = '';
+
+  showToast('Photos saved.');
+  renderPhotos();
+}
+
+function renderPhotos() {
+  const state = getState(currentProfile);
+  const photos = state.photos || [];
+  const container = document.getElementById('photos-history');
+
+  if (photos.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div style="font-size:32px">📸</div><p>No photos yet. Take your first front and side tomorrow morning before the swim.</p></div>`;
+    return;
+  }
+
+  container.innerHTML = photos.map(entry => {
+    const blurStyle = photosPrivate ? 'filter:blur(20px);transition:filter 0.3s;' : 'transition:filter 0.3s;';
+    return `
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div>
+            <div style="font-weight:600;font-size:15px;">Week ${entry.week}</div>
+            <div style="font-size:12px;color:var(--muted);">${entry.date}</div>
+          </div>
+          ${entry.week === 1 ? '<span style="font-size:11px;background:#001f1a;color:var(--teal);border:1px solid var(--teal);padding:3px 8px;border-radius:999px;font-weight:600;">Before</span>' : ''}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          ${entry.front ? `
+            <div>
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px;">Front</div>
+              <img src="${entry.front}" style="width:100%;border-radius:4px;object-fit:cover;max-height:200px;${blurStyle}">
+            </div>` : '<div></div>'}
+          ${entry.side ? `
+            <div>
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px;">Side</div>
+              <img src="${entry.side}" style="width:100%;border-radius:4px;object-fit:cover;max-height:200px;${blurStyle}">
+            </div>` : '<div></div>'}
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 // ========== ELLE STATUS ==========
